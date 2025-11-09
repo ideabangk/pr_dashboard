@@ -56,6 +56,15 @@ def prepare_df(df):
     if miss:
         st.error(f"필수 컬럼 누락: {sorted(miss)}")
         st.stop()
+    
+    # --- 정규화(0~1 범위로 스케일링) ---
+    from sklearn.preprocessing import MinMaxScaler
+
+    # 정규화할 지표 컬럼
+    scale_cols = ["ADI", "AER", "ER", "AEI", "OCI"]
+
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    df[scale_cols] = scaler.fit_transform(df[scale_cols])
     return coerce_metrics(df)
 
 # ============================ 데이터 로드 ============================
